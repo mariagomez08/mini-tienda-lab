@@ -7,43 +7,60 @@ precio y un botón de eliminar (5), y lo agregue al carrito con appendChild.
 n Primero haz que aparezca el en la lista. Luego te preocupas por el total
 */
 const botonAgregar =document.querySelectorAll('.btn-agregar')
-
 const listaCarrito = document.getElementById("lista-carrito")
 const badge = document.querySelector(".badge")
+const totalCarrito = document.getElementById("total")
 
 let cantidadItems = 0 
+let acumulado = 0
 
 botonAgregar.forEach(boton => {
     boton.addEventListener("click", function(){
     const nombre = boton.dataset.nombre
-    const precio = boton.dataset.precio
+    const precio = parseFloat(boton.dataset.precio)
+    console.log(typeof(nombre))
+    console.log(typeof(precio))
     agregarAlCarrito(nombre,precio)
+    calcularTotalAcumulado(precio)
     })  
 });
-const botonEliminar = document.querySelector(".btn-eliminar")
-botonEliminar.addEventListener("click", eliminarProductoCarrito())
+
 
 function agregarAlCarrito(nombre, precio){
 
-    let producto = document.createElement("li")
-
+    let li = document.createElement("li")
+    
     //const tarjetaProducto =`${nombre}  ${precio} <br>  <button type="button" class="btn-eliminar">eliminar</button>`
 
-    producto.innerHTML= `${nombre}  ${precio} <br> 
+    li.innerHTML= `${nombre}  ${precio} <br> 
     <div>
     <button type="button" class="btn-eliminar">eliminar</button>
     </div>
     `
-    listaCarrito.appendChild(producto)
+    listaCarrito.appendChild(li)
     cantidadItems++
+    acumulado = acumulado + precio
     updateBadge(cantidadItems)
+    updateTotal(acumulado)
+    cantidadItems--
+    const btnEliminar= li.querySelector('.btn-eliminar')
+    btnEliminar.addEventListener("click", function(){
+        eliminarItem(li,precio)
+        cantidadItems--
+        updateBadge(cantidadItems)
+    })
+
 }
+
 function updateBadge(cantidad){
     badge.textContent = cantidad
 }
-function eliminarProductoCarrito(){
+function updateTotal(precio){
+    totalCarrito.textContent = precio
+}
 
-    listaCarrito.lastElementChild.remove()
-    cantidadItems--
-    updateBadge(cantidadItems)
+function eliminarItem(li,precio){
+    li.remove()
+    acumulado= acumulado - precio
+    updateTotal(acumulado)
 }

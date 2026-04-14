@@ -1,4 +1,13 @@
+.contenedor{
 
+}
 .tarjeta-productos{
     display: flex;
+    flex-direction:row;
+    border-radius: 2%;
+    border-color: black;
 }
+.card{
+    margin: 1.8rem;
+}
+
